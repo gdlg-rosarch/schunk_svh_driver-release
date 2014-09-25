@@ -1,0 +1,150 @@
+# this is for emacs file handling -*- mode: cmake; indent-tabs-mode: nil -*-
+
+# -- BEGIN LICENSE BLOCK ----------------------------------------------
+# This file is part of the SCHUNK SVH Driver suite.
+#
+# This program is free software licensed under the LGPL
+# (GNU LESSER GENERAL PUBLIC LICENSE Version 3).
+# You can find a copy of this license in LICENSE.txt in the top
+# directory of the source code.
+#
+# © Copyright 2014 SCHUNK Mobile Greifsysteme GmbH, Lauffen/Neckar Germany
+# © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
+#
+# -- END LICENSE BLOCK ------------------------------------------------
+
+SET(ICMAKER_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icmaker")
+INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
+
+ADD_SUBDIRECTORY (src/tinyxml)
+ADD_SUBDIRECTORY (src/icl_core)
+ADD_SUBDIRECTORY (src/icl_comm)
+ADD_SUBDIRECTORY (src/driver_s5fh)
+
+cmake_minimum_required(VERSION 2.8.3)
+project(schunk_svh_driver)
+
+find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    std_msgs
+    sensor_msgs
+    dynamic_reconfigure
+    rospy
+    rqt_gui
+    rqt_gui_py
+    xacro
+)
+
+## System dependencies are found with CMake's conventions
+find_package(icl_comm)
+find_package(icl_core)
+find_package(driver_svh)
+
+catkin_python_setup()
+
+#dynamic reconfigure files
+generate_dynamic_reconfigure_options(
+  cfg/svh.cfg
+)
+
+
+###################################
+## catkin specific configuration ##
+###################################
+## The catkin_package macro generates cmake config files for your package
+## Declare things to be passed to dependent projects
+## LIBRARIES: libraries you create in this project that dependent projects also need
+## CATKIN_DEPENDS: catkin_packages dependent projects also need
+## DEPENDS: system dependencies of this project that dependent projects also need
+catkin_package(
+  LIBRARIES
+  CATKIN_DEPENDS
+  DEPENDS roscpp icl_core icl_comm driver_svh
+)
+
+
+###########
+## Build ##
+###########
+
+# mesh file generations
+# iterate through all the stl files to:
+#  1. convert to *.iv files
+#  2. generate convex decomposed .stl
+
+
+foreach(dir meshes urdf)
+   install(DIRECTORY ${dir}/ 
+      DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
+
+install(DIRECTORY launch
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
+)
+
+
+
+## Specify additional locations of header files
+## Your package locations should be listed before other locations
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${icl_comm_INCLUDE_DIRS}
+  ${icl_core_INCLUDE_DIRS}
+  ${driver_svh_INCLUDE_DIRS}
+)
+
+# Additional compiler definitions
+add_definitions(
+  ${icl_comm_DEFINITIONS}
+  ${icl_core_DEFINITIONS}
+)
+
+# Declare a cpp executable
+add_executable(svh_controller
+  src/SVHNode.cpp
+)
+
+# Simple test programs
+add_executable(svh_sin_test
+  src/SVHSinTest.cpp
+)
+
+# Add cmake target dependencies of the executable/library
+# as an example, message headers may need to be generated before nodes
+add_dependencies(svh_controller
+  icl_comm
+  icl_core
+  driver_svh
+  ${PROJECT_NAME}_gencfg
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(svh_controller
+  ${catkin_LIBRARIES}
+  ${icl_comm_LIBRARIES}
+  ${icl_core_LIBRARIES}
+  ${driver_svh_LIBRARIES}
+)
+
+
+add_dependencies(svh_sin_test
+  icl_comm
+  icl_core
+)
+
+## Specify libraries to link a library or executable target against
+target_link_libraries(svh_sin_test
+  ${catkin_LIBRARIES}
+  ${icl_comm_LIBRARIES}
+  ${icl_core_LIBRARIES}
+)
+
+#############
+## Install ##
+#############
+install(PROGRAMS
+  scripts/rqt_svh_reset_gui
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
