@@ -1,8 +1,0 @@
-ros-indigo-schunk-svh-driver (0.1.0-0saucy) saucy; urgency=high
-
-  * First public release: Contains Low-Level Driver, 3D-Model and ROS-Node
-  * Contributors: Georg Heppner, Lars Pfotzer, Nils Berg, Andreas Hermann, Steffen Rühl
-
- -- Georg Heppner <heppner@fzi.de>  Wed, 24 Sep 2014 22:00:00 -0000
-
-
