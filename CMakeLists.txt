@@ -19,7 +19,7 @@ INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
 ADD_SUBDIRECTORY (src/tinyxml)
 ADD_SUBDIRECTORY (src/icl_core)
 ADD_SUBDIRECTORY (src/icl_comm)
-ADD_SUBDIRECTORY (src/driver_s5fh)
+ADD_SUBDIRECTORY (src/driver_svh)
 
 cmake_minimum_required(VERSION 2.8.3)
 project(schunk_svh_driver)
@@ -34,11 +34,6 @@ find_package(catkin REQUIRED COMPONENTS
     rqt_gui_py
     xacro
 )
-
-## System dependencies are found with CMake's conventions
-find_package(icl_comm)
-find_package(icl_core)
-find_package(driver_svh)
 
 catkin_python_setup()
 
@@ -89,15 +84,15 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${icl_comm_INCLUDE_DIRS}
-  ${icl_core_INCLUDE_DIRS}
-  ${driver_svh_INCLUDE_DIRS}
+  ${ICL_COMM_INCLUDE_DIRS}
+  ${ICL_CORE_INCLUDE_DIRS}
+  ${DRIVER_SVH_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
 add_definitions(
-  ${icl_comm_DEFINITIONS}
-  ${icl_core_DEFINITIONS}
+  ${ICL_COMM_DEFINITIONS}
+  ${ICL_CORE_DEFINITIONS}
 )
 
 # Declare a cpp executable
@@ -122,9 +117,9 @@ add_dependencies(svh_controller
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
-  ${driver_svh_LIBRARIES}
+  ${ICL_COMM_LIBRARIES}
+  ${ICL_CORE_LIBRARIES}
+  ${DRIVER_SVH_LIBRARIES}
 )
 
 
@@ -136,20 +131,52 @@ add_dependencies(svh_sin_test
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
-  ${icl_comm_LIBRARIES}
-  ${icl_core_LIBRARIES}
+  ${ICL_COMM_LIBRARIES}
+  ${ICL_CORE_LIBRARIES}
 )
 
 #############
 ## Install ##
 #############
+# Special python handling
 install(PROGRAMS
   src/rqt_svh_reset_gui/svh_reset_gui.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+# Install targets of libs and executables
 install(TARGETS svh_controller svh_sin_test
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# install the headers
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+#launch files
+#install(DIRECTORY launch/
+#  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+#config files
+install(DIRECTORY etc/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/etc)
+
+#As the find directory will point to the share folder we need the log folder there also
+install(DIRECTORY log/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/log)
+
+#udev rules
+install(DIRECTORY udev/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/udev)
+
+# Individual files (Quick commands and the urdf.rviz)
+install(FILES quick_commands urdf.rviz plugin.xml
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+# Install resources
+install(DIRECTORY resource
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
