@@ -12,17 +12,18 @@
 # © Copyright 2014 FZI Forschungszentrum Informatik, Karlsruhe, Germany
 #
 # -- END LICENSE BLOCK ------------------------------------------------
+cmake_minimum_required(VERSION 2.8.3)
 
 SET(ICMAKER_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icmaker")
 INCLUDE(${ICMAKER_DIRECTORY}/CMakeLists.txt)
 
-ADD_SUBDIRECTORY (src/tinyxml)
-ADD_SUBDIRECTORY (src/icl_core)
-ADD_SUBDIRECTORY (src/icl_comm)
-ADD_SUBDIRECTORY (src/driver_svh)
-
-cmake_minimum_required(VERSION 2.8.3)
 project(schunk_svh_driver)
+
+FIND_PACKAGE( icl_core REQUIRED COMPONENTS icl_core_logging icl_core_config icl_core)
+FIND_PACKAGE( icl_comm REQUIRED COMPONENTS icl_comm_serial icl_comm)
+ADD_SUBDIRECTORY (src/driver_svh)
+FIND_PACKAGE( driver_svh REQUIRED)
+
 
 find_package(catkin REQUIRED COMPONENTS
     roscpp
@@ -69,7 +70,7 @@ catkin_package(
 
 
 foreach(dir description/meshes description/urdf)
-   install(DIRECTORY ${dir}/ 
+   install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
@@ -84,26 +85,26 @@ install(DIRECTORY launch
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${ICL_COMM_INCLUDE_DIRS}
-  ${ICL_CORE_INCLUDE_DIRS}
-  ${DRIVER_SVH_INCLUDE_DIRS}
+  ${icl_core_INCLUDE_DIRS}
+  ${icl_comm_INCLUDE_DIRS}
+  ${driver_svh_INCLUDE_DIRS}
 )
 
 # Additional compiler definitions
-add_definitions(
-  ${ICL_COMM_DEFINITIONS}
-  ${ICL_CORE_DEFINITIONS}
-)
+add_definitions( ${icl_core_DEFINITIONS} )
+add_definitions( ${icl_comm_DEFINITIONS} )
 
 # Declare a cpp executable
 add_executable(svh_controller
   src/SVHNode.cpp
+  src/DynamicParameterClass.cpp
 )
 
 # Simple test programs
 add_executable(svh_sin_test
   src/SVHSinTest.cpp
 )
+
 
 # Add cmake target dependencies of the executable/library
 # as an example, message headers may need to be generated before nodes
@@ -113,6 +114,7 @@ add_dependencies(svh_controller
   driver_svh
   ${PROJECT_NAME}_gencfg
 )
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(svh_controller
@@ -126,6 +128,7 @@ target_link_libraries(svh_controller
 add_dependencies(svh_sin_test
   icl_comm
   icl_core
+  driver_svh
 )
 
 ## Specify libraries to link a library or executable target against
@@ -133,6 +136,7 @@ target_link_libraries(svh_sin_test
   ${catkin_LIBRARIES}
   ${ICL_COMM_LIBRARIES}
   ${ICL_CORE_LIBRARIES}
+  ${driver_svh_LIBRARIES}
 )
 
 #############
