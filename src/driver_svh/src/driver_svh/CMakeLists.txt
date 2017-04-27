@@ -36,16 +36,14 @@ ICMAKER_INCLUDE_DIRECTORIES(${DRIVER_SVH_INCLUDE_DIRS})
 
 #non exported deps
 ICMAKER_DEPENDENCIES(
-  icl_core_logging
-  icl_core_config
+  icl_core
 )
 
 #Exported deps
 ICMAKER_DEPENDENCIES(EXPORT
   icl_core
-  icl_core_thread
   icl_comm
-  icl_comm_serial
+  Boost_THREAD
 )
 
 # Websockets are a later expansion that is not considered at the moment but prepared for
