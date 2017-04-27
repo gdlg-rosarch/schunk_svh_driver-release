@@ -2,6 +2,45 @@
 Changelog for package schunk_svh_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.0 (2017-04-25)
+------------------
+* Added hardware support for the 2nd hardware version of the Schunk SVH
+* Added dynamic parameter switcher for automatically setting parameters
+* Improved sine test with increased movement range, thumb movement and possibility to change the speed
+* Extracted ``fzi_icl_core`` and ``fzi_icl_comm``
+* Fixed xacro warnings
+* Contributors: Felix Mauch, Pascal Becker, Johannes Mangler
+
+0.1.7 (2015-06-18)
+------------------
+* Added correct Reset of package counts
+* Added Retry functionality for connection failures
+* Added Readout of efforts
+* Correctly use the given homing settings ( fixes #1 )
+* Added safety warning for high current settings
+* Added much debugging output for the reset routine
+* Fixes of typos, comments and other minor things
+* Rudimentary windows support for icl libs
+* Removed icl_comm_websocket as it was not strictly needed for the ROSnode of the driver
+* Added effort feedback
+* Added channel current output
+* Added retry option for the connect routine to make autostart more robust
+* Added the TcoNoDelay transport hint
+* Include name prefix for the channel names
+* add collision meshes to URDF
+* Removed parts that where actually from another project and did not belong into the SVH Driver package
+* Added a name prefix for the hand to allow multiple instantiation of the hand model.
+* Make hand member names dependent of hand name
+* Added a mainpage.dox with an image and the corresponing rosdoc config
+* Contributors: Andreas Hermann, Georg Heppner, Nils Berg, Steffen Ruehl
+
+0.1.6 (2014-09-30)
+------------------
+* Added a mainpage.dox with an image and the corresponing rosdoc config
+* Fixed xacro and run_demo to work with the new package structure
+* Added a new node only launch script
+* Contributors: Georg Heppner
+
 0.1.5 (2014-09-29)
 ------------------
 * Moved rviz config to etc and changed gui to a default no show
@@ -19,7 +58,7 @@ Changelog for package schunk_svh_driver
 * Contributors: Georg Heppner
 
 0.1.3 (2014-09-26)
------------
+------------------
 * Moved the widget gui to a resource folder as it is suggested by the rqt tutorials
 * Changed the includes from using find scripts to use internally set variables to prevent failures in case of multiple icl workspace instances
 * Added missing plugin.xml to install targets
