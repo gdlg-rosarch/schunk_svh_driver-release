@@ -1,0 +1,12 @@
+Source: ros-kinetic-schunk-svh-driver
+Section: misc
+Priority: extra
+Maintainer: Georg Heppner <heppner@fzi.de>
+Build-Depends: debhelper (>= 9.0.0), ros-kinetic-catkin, ros-kinetic-dynamic-reconfigure, ros-kinetic-fzi-icl-comm, ros-kinetic-fzi-icl-core, ros-kinetic-roscpp, ros-kinetic-rospy, ros-kinetic-rqt-gui, ros-kinetic-rqt-gui-py, ros-kinetic-sensor-msgs, ros-kinetic-std-msgs, ros-kinetic-urdf, ros-kinetic-xacro
+Homepage: http://www.ros.org/wiki/schunk_svh_driver
+Standards-Version: 3.9.2
+
+Package: ros-kinetic-schunk-svh-driver
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kinetic-dynamic-reconfigure, ros-kinetic-fzi-icl-comm, ros-kinetic-fzi-icl-core, ros-kinetic-roscpp, ros-kinetic-rospy, ros-kinetic-rqt-gui, ros-kinetic-rqt-gui-py, ros-kinetic-sensor-msgs, ros-kinetic-std-msgs, ros-kinetic-urdf, ros-kinetic-xacro
+Description: SVH Driver wrapper to enable control of the Schunk five finger hand
