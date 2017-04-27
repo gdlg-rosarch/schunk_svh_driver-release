@@ -1,0 +1,12 @@
+Source: ros-jade-schunk-svh-driver
+Section: misc
+Priority: extra
+Maintainer: Georg Heppner <heppner@fzi.de>
+Build-Depends: debhelper (>= 9.0.0), ros-jade-catkin, ros-jade-dynamic-reconfigure, ros-jade-fzi-icl-comm, ros-jade-fzi-icl-core, ros-jade-roscpp, ros-jade-rospy, ros-jade-rqt-gui, ros-jade-rqt-gui-py, ros-jade-sensor-msgs, ros-jade-std-msgs, ros-jade-urdf, ros-jade-xacro
+Homepage: http://www.ros.org/wiki/schunk_svh_driver
+Standards-Version: 3.9.2
+
+Package: ros-jade-schunk-svh-driver
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jade-dynamic-reconfigure, ros-jade-fzi-icl-comm, ros-jade-fzi-icl-core, ros-jade-roscpp, ros-jade-rospy, ros-jade-rqt-gui, ros-jade-rqt-gui-py, ros-jade-sensor-msgs, ros-jade-std-msgs, ros-jade-urdf, ros-jade-xacro
+Description: SVH Driver wrapper to enable control of the Schunk five finger hand
